@@ -36,10 +36,6 @@ data "kubernetes_namespace" "backend" {
   }
 }
 
-data "digitalocean_database_cluster" "clusterdb" {
-  name = "clusterdb"
-}
-
 locals {
   prod_bucket_name = "${var.prod_bucket_subdomain}.${var.domain}"
   backend_domain   = "api.${var.domain}"

@@ -4,9 +4,9 @@ provider "digitalocean" {
 
 terraform {
   backend "s3" {
-    bucket         = "memefier-remote-state-s3"
-    key            = "prod/data-stores/terraform.tfstate"
-    encrypt        = true
+    bucket  = "memefier-remote-state-s3"
+    key     = "prod/data-stores/terraform.tfstate"
+    encrypt = true
   }
 }
 
@@ -14,11 +14,11 @@ resource "aws_s3_bucket" "prod_bucket" {
   bucket = local.prod_bucket_name
   # Enable versioning so we can see the full revision history of our
   # state files
-  acl    = "public-read"
+  acl = "public-read"
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "HEAD"]
-    allowed_origins = [var.domain]
+    allowed_origins = ["https://${var.domain}"]
     max_age_seconds = 3000
   }
   tags = {
@@ -59,20 +59,13 @@ POLICY
 }
 
 resource "digitalocean_database_cluster" "clusterdb" {
-  name       = "clusterdb"
-  engine     = "pg"
-  version    = var.pg_version
-  size       = var.size_db
-  region     = var.region_do
-  node_count = 1
+  name                 = "clusterdb"
+  engine               = "pg"
+  version              = var.pg_version
+  size                 = var.size_db
+  region               = var.region_do
+  node_count           = 1
   private_network_uuid = data.digitalocean_vpc.do_prod_vpc.id
 }
 
-resource "digitalocean_database_connection_pool" "pool-01" {
-  cluster_id = digitalocean_database_cluster.clusterdb.id
-  name       = "pool-01"
-  mode       = "transaction"
-  size       = 17
-  db_name    = "defaultdb"
-  user       = "doadmin"
-}
+

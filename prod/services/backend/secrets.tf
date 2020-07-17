@@ -47,7 +47,7 @@ resource "kubernetes_secret" "prod_env_variables" {
     ALLOWED_HOSTS                  = var.allowed_hosts
     AWS_STORAGE_BUCKET_NAME        = local.prod_bucket_name
     CORS_ORIGIN_WHITELIST_STRINGS  = var.cors_origin_whitelist_strings
-    DATABASE_URL                   = data.digitalocean_database_cluster.clusterdb.private_uri
+    DATABASE_URL                   = digitalocean_database_connection_pool.pool_01.private_uri
     DJANGO_MEDIA_HOST              = "https://${local.prod_bucket_name}"
     DJANGO_STATIC_HOST             = "https://${local.prod_bucket_name}"
     DJANGO_SETTINGS_MODULE         = "settings.heroku"
